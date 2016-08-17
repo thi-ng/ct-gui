@@ -22,10 +22,10 @@ typedef void (*CTGUI_Callback)(CTGUI_Element *button);
 
 // element state flags
 enum {
-  CTGUI_OFF = 1,
-  CTGUI_ON = 2,
-  CTGUI_HOVER = 4,
-  CTGUI_DIRTY = 8,
+  CTGUI_OFF        = 1,
+  CTGUI_ON         = 2,
+  CTGUI_HOVER      = 4,
+  CTGUI_DIRTY      = 8,
   CTGUI_ONOFF_MASK = CTGUI_ON | CTGUI_OFF
 };
 
@@ -79,10 +79,16 @@ void ctgui_render_button(CTGUI_Element *bt);
 void ctgui_handle_dial(CTGUI_Element *bt, CTGUI_TouchState *touch);
 void ctgui_render_dial(CTGUI_Element *bt);
 
-void ctgui_draw_sprite(uint16_t x, uint16_t y, uint8_t id,
+void ctgui_draw_sprite(uint16_t x,
+		       uint16_t y,
+		       uint8_t id,
 		       CTGUI_SpriteSheet *sprite);
-void ctgui_draw_raw(uint16_t x, uint16_t y, uint16_t width, uint16_t height,
-		    uint8_t *pixels, uint32_t colorMode);
+void ctgui_draw_raw(uint16_t x,
+		    uint16_t y,
+		    uint16_t width,
+		    uint16_t height,
+		    uint8_t *pixels,
+		    uint32_t colorMode);
 
 CTGUI *ctgui_init(uint8_t num, sFONT *font, uint32_t bgCol, uint32_t textCol);
 void ctgui_force_redraw(CTGUI *gui);
@@ -90,15 +96,31 @@ void ctgui_update(CTGUI *gui, CTGUI_TouchState *touch);
 void ctgui_draw(CTGUI *gui);
 void ctgui_draw_element_label(CTGUI_Element *e);
 
-CTGUI_Element *ctgui_elementcommon(uint8_t id, char *label, uint16_t x,
-				   uint16_t y, CTGUI_SpriteSheet *sprite,
+CTGUI_Element *ctgui_elementcommon(uint8_t id,
+				   char *label,
+				   uint16_t x,
+				   uint16_t y,
+				   CTGUI_SpriteSheet *sprite,
 				   CTGUI_Callback cb);
-CTGUI_Element *ctgui_togglebutton(uint8_t id, char *label, uint16_t x,
-				  uint16_t y, float val,
-				  CTGUI_SpriteSheet *sprite, CTGUI_Callback cb);
-CTGUI_Element *ctgui_radiobutton(uint8_t id, char *label, uint16_t x,
-				 uint16_t y, float val,
-				 CTGUI_SpriteSheet *sprite, CTGUI_Callback cb);
-CTGUI_Element *ctgui_dialbutton(uint8_t id, char *label, uint16_t x, uint16_t y,
-				float val, float sens,
-				CTGUI_SpriteSheet *sprite, CTGUI_Callback cb);
+CTGUI_Element *ctgui_togglebutton(uint8_t id,
+				  char *label,
+				  uint16_t x,
+				  uint16_t y,
+				  float val,
+				  CTGUI_SpriteSheet *sprite,
+				  CTGUI_Callback cb);
+CTGUI_Element *ctgui_radiobutton(uint8_t id,
+				 char *label,
+				 uint16_t x,
+				 uint16_t y,
+				 float val,
+				 CTGUI_SpriteSheet *sprite,
+				 CTGUI_Callback cb);
+CTGUI_Element *ctgui_dialbutton(uint8_t id,
+				char *label,
+				uint16_t x,
+				uint16_t y,
+				float val,
+				float sens,
+				CTGUI_SpriteSheet *sprite,
+				CTGUI_Callback cb);
