@@ -6,20 +6,16 @@ CT_BEGIN_DECLS
 
 #include <stdint.h>
 
-#ifndef UI_BG_COLOR
-#define UI_BG_COLOR ((uint32_t)0xff59626c)
+#ifndef CTGUI_BG_COLOR
+#define CTGUI_BG_COLOR ((uint32_t)0xff59626c)
 #endif
 
-#ifndef UI_TEXT_COLOR
-#define UI_TEXT_COLOR ((uint32_t)0xffcccccc)
+#ifndef CTGUI_TEXT_COLOR
+#define CTGUI_TEXT_COLOR ((uint32_t)0xffcccccc)
 #endif
 
-#ifndef UI_FONT
-#define UI_FONT Font12
-#endif
-
-#ifndef UI_SENSITIVITY
-#define UI_SENSITIVITY 0.02f
+#ifndef CTGUI_SENSITIVITY
+#define CTGUI_SENSITIVITY 0.02f
 #endif
 
 typedef struct {
