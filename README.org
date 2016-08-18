@@ -1,7 +1,8 @@
 * thi.ng/ct-gui
 
-Small GUI library for embedded devices, in principle x-platform, but
-currently only fully implemented for STM32F746-DISCO.
+Small GUI library for embedded devices, x-platform in principle, but
+currently only fully implemented for STM32F746-DISCO boards
+(modifications for other STM32 devices should be trivial).
 
 Currently supported GUI controls:
 
@@ -9,10 +10,16 @@ Currently supported GUI controls:
 - Radio button
 - Dial (can also be slider)
 
+** Sprite sheets
+
 By default all GUI elements make use of sprite sheets, e.g. generated
 with the amazing [[http://www.g200kg.com/en/software/knobman.html][jKnobMan]] / [[http://www.g200kg.com/en/webknobman/][WebKnobMan]] editor (there're [[http://www.g200kg.com/en/webknobman/gallery.php][100s of button
 designs]] available on their website). Alternatively, you can specify a
 custom render function for each individual GUI element.
+
+Sprite sheets can be converted into C header files using
+[[http://thi.ng/img2array][thi.ng/img2array]]. This repo contains 2 different sheets for dial
+buttons.
 
 ** Example usage
 
