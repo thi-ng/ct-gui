@@ -1,5 +1,7 @@
 #pragma once
 
+#include "stm32746g_discovery.h"
+#include "stm32746g_discovery_lcd.h"
 #include "stm32746g_discovery_ts.h"
 
 #include "gui.h"

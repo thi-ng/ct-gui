@@ -1,8 +1,4 @@
-#include "stm32746g_discovery.h"
-#include "stm32746g_discovery_lcd.h"
-#include "stm32746g_discovery_ts.h"
-
-#include "gui.h"
+#include "gui_stm32.h"
 
 extern LTDC_HandleTypeDef hLtdcHandler;
 
