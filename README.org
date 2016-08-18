@@ -29,9 +29,9 @@ buttons.
 
 See the following workshop repositories for concrete usage examples:
 
-- [[https://github.com/thi-ng/ws-ldn-4][WS-LDN-4]]
-- [[https://github.com/thi-ng/ws-ldn-7][WS-LDN-7]]
-- [[https://github.com/thi-ng/ws-ldn-12][WS-LDN-12]] (this repo includes ct-gui as submodule)
+- [[https://github.com/thi-ng/ws-ldn-12][WS-LDN-12]] ([[https://github.com/thi-ng/ws-ldn-12/blob/master/src/ex02/main.c][example source]] - this repo also includes *ct-gui* as submodule)
+- [[https://github.com/thi-ng/ws-ldn-7][WS-LDN-7]] (uses older version)
+- [[https://github.com/thi-ng/ws-ldn-4][WS-LDN-4]] (uses older version)
 
 ** Basic use
 
