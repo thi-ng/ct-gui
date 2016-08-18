@@ -4,6 +4,8 @@ Small GUI library for embedded devices, x-platform in principle, but
 currently only fully implemented for STM32F746-DISCO boards
 (modifications for other STM32 devices should be trivial).
 
+*Compiled code size ~1KB (or less).*
+
 Currently supported GUI controls:
 
 - Push button
