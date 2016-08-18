@@ -2,6 +2,8 @@
 #include "stm32746g_discovery_lcd.h"
 #include "stm32746g_discovery_ts.h"
 
+#include "gui.h"
+
 extern LTDC_HandleTypeDef hLtdcHandler;
 
 extern void LL_ConvertLineToARGB8888(void *src,
@@ -9,7 +11,7 @@ extern void LL_ConvertLineToARGB8888(void *src,
 				     uint32_t xstride,
 				     uint32_t color_mode);
 
-void ctgui_draw_element_label(CTGUI_Element *e) {
+void ctgui_draw_element_label(const CTGUI_Element *e) {
   if (e->label != NULL) {
     CTGUI_SpriteSheet *sprite = e->sprite;
     BSP_LCD_DisplayStringAt(e->x, e->y + sprite->sprite_height + 4,
@@ -19,10 +21,10 @@ void ctgui_draw_element_label(CTGUI_Element *e) {
 
 static uint8_t colormode_strides[] = {4, 3, 2, 2, 2};
 
-void ctgui_draw_sprite(uint16_t x,
+void ctgui_draw_sprite(const CTGUI_SpriteSheet *sprite,
+		       uint16_t x,
 		       uint16_t y,
-		       uint8_t id,
-		       CTGUI_SpriteSheet *sprite) {
+		       uint8_t id) {
   uint32_t lcdWidth = BSP_LCD_GetXSize();
   uint32_t address  = hLtdcHandler.LayerCfg[LTDC_ACTIVE_LAYER].FBStartAdress +
 		     (((lcdWidth * y) + x) << 2);
@@ -57,4 +59,24 @@ void ctgui_draw_raw(uint16_t x,
     address += lcdWidth;
     pixels += stride;
   }
+}
+
+void ctgui_draw(CTGUI *gui) {
+  BSP_LCD_SetFont((sFont *)gui->font);
+  BSP_LCD_SetBackColor(gui->col_bg);
+  BSP_LCD_SetTextColor(gui->col_text);
+  for (uint32_t i = 0; i < gui->num_items; i++) {
+    CTGUI_Element *e = &gui->items[i];
+    if (e->state & CTGUI_DIRTY) {
+      e->render(e);
+      e->state &= ~((uint16_t)CTGUI_DIRTY);
+    }
+  }
+  gui->redraw = 0;
+}
+
+void ctgui_update_touch(TS_StateTypeDef *raw, CTGUI_TouchState *touch) {
+  touch->touch_detected = raw->touch_detected;
+  touch->touchx[0]      = raw->touchx[0];
+  touch->touchy[0]      = raw->touchy[0];
 }

@@ -1,9 +1,26 @@
 #pragma once
 
+#include "ct-head/features.h"
+
+CT_BEGIN_DECLS
+
+#include <stdint.h>
+
+#ifndef UI_BG_COLOR
 #define UI_BG_COLOR ((uint32_t)0xff59626c)
+#endif
+
+#ifndef UI_TEXT_COLOR
 #define UI_TEXT_COLOR ((uint32_t)0xffcccccc)
+#endif
+
+#ifndef UI_FONT
 #define UI_FONT Font12
+#endif
+
+#ifndef UI_SENSITIVITY
 #define UI_SENSITIVITY 0.02f
+#endif
 
 typedef struct {
   uint16_t touchx[1];
@@ -16,8 +33,8 @@ typedef struct {
 typedef struct CTGUI_Element CTGUI_Element;
 
 typedef void (*CTGUI_ElementHandler)(CTGUI_Element *button,
-				     CTGUI_TouchState *touchState);
-typedef void (*CTGUI_ElementRenderer)(CTGUI_Element *button);
+				     const CTGUI_TouchState *touchState);
+typedef void (*CTGUI_ElementRenderer)(const CTGUI_Element *button);
 typedef void (*CTGUI_Callback)(CTGUI_Element *button);
 
 // element state flags
@@ -63,26 +80,27 @@ typedef struct {
 typedef struct { float value; } CTGUI_PushButtonState;
 
 typedef struct {
-  CTGUI_Element **items;
+  CTGUI_Element *items;
+  void *font;
+  uint32_t num_items;
   uint32_t col_bg;
   uint32_t col_text;
-  void *font;
-  uint8_t num_items;
-  int8_t selected;
+  int32_t selected;
   uint8_t redraw;
 } CTGUI;
 
-void ctgui_handle_togglebutton(CTGUI_Element *bt, CTGUI_TouchState *touch);
-void ctgui_handle_radiobutton(CTGUI_Element *bt, CTGUI_TouchState *touch);
-void ctgui_render_button(CTGUI_Element *bt);
+void ctgui_handle_togglebutton(CTGUI_Element *bt,
+			       const CTGUI_TouchState *touch);
+void ctgui_handle_radiobutton(CTGUI_Element *bt, const CTGUI_TouchState *touch);
+void ctgui_render_button(const CTGUI_Element *bt);
 
-void ctgui_handle_dial(CTGUI_Element *bt, CTGUI_TouchState *touch);
-void ctgui_render_dial(CTGUI_Element *bt);
+void ctgui_handle_dial(CTGUI_Element *bt, const CTGUI_TouchState *touch);
+void ctgui_render_dial(const CTGUI_Element *bt);
 
-void ctgui_draw_sprite(uint16_t x,
+void ctgui_draw_sprite(const CTGUI_SpriteSheet *sprite,
+		       uint16_t x,
 		       uint16_t y,
-		       uint8_t id,
-		       CTGUI_SpriteSheet *sprite);
+		       uint8_t id);
 void ctgui_draw_raw(uint16_t x,
 		    uint16_t y,
 		    uint16_t width,
@@ -90,33 +108,41 @@ void ctgui_draw_raw(uint16_t x,
 		    uint8_t *pixels,
 		    uint32_t colorMode);
 
-CTGUI *ctgui_init(uint8_t num, sFONT *font, uint32_t bgCol, uint32_t textCol);
+CTGUI *ctgui_init(CTGUI *gui,
+		  uint32_t num,
+		  void *font,
+		  uint32_t bgCol,
+		  uint32_t textCol);
 void ctgui_force_redraw(CTGUI *gui);
-void ctgui_update(CTGUI *gui, CTGUI_TouchState *touch);
 void ctgui_draw(CTGUI *gui);
-void ctgui_draw_element_label(CTGUI_Element *e);
+void ctgui_draw_element_label(const CTGUI_Element *e);
+void ctgui_update(CTGUI *gui, const CTGUI_TouchState *touch);
 
-CTGUI_Element *ctgui_elementcommon(uint8_t id,
-				   char *label,
-				   uint16_t x,
-				   uint16_t y,
-				   CTGUI_SpriteSheet *sprite,
-				   CTGUI_Callback cb);
-CTGUI_Element *ctgui_togglebutton(uint8_t id,
+CTGUI_Element *ctgui_element_init(CTGUI *gui,
+				  uint32_t id,
+				  char *label,
+				  uint16_t x,
+				  uint16_t y,
+				  CTGUI_SpriteSheet *sprite,
+				  CTGUI_Callback cb);
+CTGUI_Element *ctgui_togglebutton(CTGUI *gui,
+				  uint32_t id,
 				  char *label,
 				  uint16_t x,
 				  uint16_t y,
 				  float val,
 				  CTGUI_SpriteSheet *sprite,
 				  CTGUI_Callback cb);
-CTGUI_Element *ctgui_radiobutton(uint8_t id,
+CTGUI_Element *ctgui_radiobutton(CTGUI *gui,
+				 uint32_t id,
 				 char *label,
 				 uint16_t x,
 				 uint16_t y,
 				 float val,
 				 CTGUI_SpriteSheet *sprite,
 				 CTGUI_Callback cb);
-CTGUI_Element *ctgui_dialbutton(uint8_t id,
+CTGUI_Element *ctgui_dialbutton(CTGUI *gui,
+				uint32_t id,
 				char *label,
 				uint16_t x,
 				uint16_t y,
@@ -124,3 +150,5 @@ CTGUI_Element *ctgui_dialbutton(uint8_t id,
 				float sens,
 				CTGUI_SpriteSheet *sprite,
 				CTGUI_Callback cb);
+
+CT_END_DECLS

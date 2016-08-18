@@ -4,18 +4,6 @@
 #include "ct-head/math.h"
 #include "gui.h"
 
-extern void ctgui_draw_element_label(CTGUI_Element *e);
-extern void ctgui_draw_sprite(uint16_t x,
-			      uint16_t y,
-			      uint8_t id,
-			      CTGUI_SpriteSheet *sprite);
-extern void ctgui_draw_raw(uint16_t x,
-			   uint16_t y,
-			   uint16_t width,
-			   uint16_t height,
-			   uint8_t *pixels,
-			   uint32_t colorMode);
-
 ct_inline int point_inside(const CTGUI_Element *e, uint16_t x, uint16_t y) {
   return (x >= e->x && x < e->x + e->width && y >= e->y &&
 	  y < e->y + e->height);
@@ -23,8 +11,9 @@ ct_inline int point_inside(const CTGUI_Element *e, uint16_t x, uint16_t y) {
 
 // push button functions
 
-void ctgui_handle_togglebutton(CTGUI_Element *e, CTGUI_TouchState *touch) {
-  if (touch->touchDetected) {
+void ctgui_handle_togglebutton(CTGUI_Element *e,
+			       const CTGUI_TouchState *touch) {
+  if (touch->touch_detected) {
     uint16_t x = touch->touchx[0];
     uint16_t y = touch->touchy[0];
     if (point_inside(e, x, y)) {
@@ -49,8 +38,8 @@ void ctgui_handle_togglebutton(CTGUI_Element *e, CTGUI_TouchState *touch) {
   }
 }
 
-void ctgui_handle_radiobutton(CTGUI_Element *e, CTGUI_TouchState *touch) {
-  if (touch->touchDetected) {
+void ctgui_handle_radiobutton(CTGUI_Element *e, const CTGUI_TouchState *touch) {
+  if (touch->touch_detected) {
     uint16_t x = touch->touchx[0];
     uint16_t y = touch->touchy[0];
     if (point_inside(e, x, y)) {
@@ -66,21 +55,18 @@ void ctgui_handle_radiobutton(CTGUI_Element *e, CTGUI_TouchState *touch) {
   }
 }
 
-void ctgui_render_button(CTGUI_Element *e) {
-  if (e->state & CTGUI_DIRTY) {
-    CTGUI_SpriteSheet *sprite = e->sprite;
-    uint8_t state             = e->state & CTGUI_ONOFF_MASK;
-    uint8_t id                = state == CTGUI_ON ? 1 : 0;
-    ctgui_draw_sprite(e->x, e->y, id, sprite);
-    ctgui_draw_element_label(e);
-    e->state &= ~((uint16_t)CTGUI_DIRTY);
-  }
+void ctgui_render_button(const CTGUI_Element *e) {
+  CTGUI_SpriteSheet *sprite = e->sprite;
+  uint8_t state             = e->state & CTGUI_ONOFF_MASK;
+  uint8_t id                = state == CTGUI_ON ? 1 : 0;
+  ctgui_draw_sprite(sprite, e->x, e->y, id);
+  ctgui_draw_element_label(e);
 }
 
 // dial button functions
 
-void ctgui_handle_dial(CTGUI_Element *e, CTGUI_TouchState *touch) {
-  if (touch->touchDetected) {
+void ctgui_handle_dial(CTGUI_Element *e, const CTGUI_TouchState *touch) {
+  if (touch->touch_detected) {
     uint16_t x                = touch->touchx[0];
     uint16_t y                = touch->touchy[0];
     CTGUI_DialButtonState *db = (CTGUI_DialButtonState *)e->user_data;
@@ -106,28 +92,24 @@ void ctgui_handle_dial(CTGUI_Element *e, CTGUI_TouchState *touch) {
   }
 }
 
-void ctgui_render_dial(CTGUI_Element *e) {
-  if (e->state & CTGUI_DIRTY) {
-    CTGUI_SpriteSheet *sprite = e->sprite;
-    CTGUI_DialButtonState *db = (CTGUI_DialButtonState *)e->user_data;
-    uint8_t id = (uint8_t)(db->value * (float)(sprite->num_sprites - 1));
-    ctgui_draw_sprite(e->x, e->y, id, sprite);
-    ctgui_draw_element_label(e);
-    e->state &= ~((uint16_t)CTGUI_DIRTY);
-  }
+void ctgui_render_dial(const CTGUI_Element *e) {
+  CTGUI_SpriteSheet *sprite = e->sprite;
+  CTGUI_DialButtonState *db = (CTGUI_DialButtonState *)e->user_data;
+  uint8_t id = (uint8_t)(db->value * (float)(sprite->num_sprites - 1));
+  ctgui_draw_sprite(sprite, e->x, e->y, id);
+  ctgui_draw_element_label(e);
 }
-
-// common functionality
 
 // CTGUI element constructors
 
-CTGUI_Element *ctgui_element_init(uint8_t id,
+CTGUI_Element *ctgui_element_init(CTGUI *gui,
+				  uint32_t id,
 				  char *label,
 				  uint16_t x,
 				  uint16_t y,
 				  CTGUI_SpriteSheet *sprite,
 				  CTGUI_Callback cb) {
-  CTGUI_Element *e = calloc(1, sizeof(CTGUI_Element));
+  CTGUI_Element *e = &gui->items[id];
   e->id            = id;
   e->x             = x;
   e->y             = y;
@@ -140,7 +122,8 @@ CTGUI_Element *ctgui_element_init(uint8_t id,
   return e;
 }
 
-CTGUI_Element *ctgui_dialbutton(uint8_t id,
+CTGUI_Element *ctgui_dialbutton(CTGUI *gui,
+				uint32_t id,
 				char *label,
 				uint16_t x,
 				uint16_t y,
@@ -148,9 +131,9 @@ CTGUI_Element *ctgui_dialbutton(uint8_t id,
 				float sens,
 				CTGUI_SpriteSheet *sprite,
 				CTGUI_Callback cb) {
-  CTGUI_Element *e          = ctgui_element_init(id, label, x, y, sprite, cb);
+  CTGUI_Element *e = ctgui_element_init(gui, id, label, x, y, sprite, cb);
   CTGUI_DialButtonState *db = calloc(1, sizeof(CTGUI_DialButtonState));
-  e->handler                = handleDial;
+  e->handler                = ctgui_handle_dial;
   e->render                 = ctgui_render_dial;
   e->user_data              = db;
   db->value                 = val;
@@ -158,75 +141,63 @@ CTGUI_Element *ctgui_dialbutton(uint8_t id,
   return e;
 }
 
-CTGUI_Element *ctgui_togglebutton(uint8_t id,
+CTGUI_Element *ctgui_togglebutton(CTGUI *gui,
+				  uint32_t id,
 				  char *label,
 				  uint16_t x,
 				  uint16_t y,
 				  float val,
 				  CTGUI_SpriteSheet *sprite,
 				  CTGUI_Callback cb) {
-  CTGUI_Element *e          = ctgui_element_init(id, label, x, y, sprite, cb);
+  CTGUI_Element *e = ctgui_element_init(gui, id, label, x, y, sprite, cb);
   CTGUI_PushButtonState *pb = calloc(1, sizeof(CTGUI_PushButtonState));
-  e->handler                = handleToggleButton;
-  e->render                 = renderButton;
+  e->handler                = ctgui_handle_togglebutton;
+  e->render                 = ctgui_render_button;
   e->user_data              = pb;
   pb->value                 = val;
   return e;
 }
 
-CTGUI_Element *ctgui_radiobutton(uint8_t id,
+CTGUI_Element *ctgui_radiobutton(CTGUI *gui,
+				 uint32_t id,
 				 char *label,
 				 uint16_t x,
 				 uint16_t y,
 				 float val,
 				 CTGUI_SpriteSheet *sprite,
 				 CTGUI_Callback cb) {
-  CTGUI_Element *e          = ctgui_element_init(id, label, x, y, sprite, cb);
+  CTGUI_Element *e = ctgui_element_init(gui, id, label, x, y, sprite, cb);
   CTGUI_PushButtonState *pb = calloc(1, sizeof(CTGUI_PushButtonState));
-  e->handler                = handleRadioButton;
-  e->render                 = renderButton;
+  e->handler                = ctgui_handle_radiobutton;
+  e->render                 = ctgui_render_button;
   e->user_data              = pb;
   pb->value                 = val;
   return e;
 }
 
-CTGUI *ctgui_init(uint8_t num, void *font, uint32_t bgCol, uint32_t textCol) {
-  CTGUI *gui     = calloc(1, sizeof(CTGUI));
-  gui->items     = calloc(num, sizeof(CTGUI_Element *));
-  gui->numItems  = num;
+CTGUI *ctgui_init(CTGUI *gui,
+		  uint32_t num,
+		  void *font,
+		  uint32_t bgCol,
+		  uint32_t textCol) {
+  gui->items     = calloc(num, sizeof(CTGUI_Element));
+  gui->num_items = num;
   gui->font      = font;
-  gui->bgColor   = bgCol;
-  gui->textColor = textCol;
+  gui->col_bg    = bgCol;
+  gui->col_text  = textCol;
   return gui;
 }
 
 void ctgui_force_redraw(CTGUI *gui) {
   gui->redraw = 1;
-  for (uint8_t i = 0; i < gui->numItems; i++) {
-    gui->items[i]->state |= CTGUI_DIRTY;
+  for (size_t i = 0; i < gui->num_items; i++) {
+    gui->items[i].state |= CTGUI_DIRTY;
   }
 }
 
-void ctgui_update(CTGUI *gui, CTGUI_TouchState *touch) {
-  for (uint8_t i = 0; i < gui->numItems; i++) {
-    CTGUI_Element *e = gui->items[i];
+void ctgui_update(CTGUI *gui, const CTGUI_TouchState *touch) {
+  for (size_t i = 0; i < gui->num_items; i++) {
+    CTGUI_Element *e = &gui->items[i];
     e->handler(e, touch);
   }
-}
-
-void ctgui_draw(CTGUI *gui) {
-  BSP_LCD_SetFont(gui->font);
-  BSP_LCD_SetBackColor(gui->bgColor);
-  BSP_LCD_SetTextColor(gui->textColor);
-  for (uint8_t i = 0; i < gui->numItems; i++) {
-    CTGUI_Element *e = gui->items[i];
-    e->render(e);
-  }
-  gui->redraw = 0;
-}
-
-void ctgui_update_touch(TS_StateTypeDef *raw, CTGUI_TouchState *touch) {
-  touch->touchDetected = raw->touchDetected;
-  touch->touchx[0]     = raw->touchx[0];
-  touch->touchy[0]     = raw->touchy[0];
 }
