@@ -72,7 +72,7 @@ void ctgui_draw(CTGUI *gui) {
 }
 
 void ctgui_update_touch(TS_StateTypeDef *raw, CTGUI_TouchState *touch) {
-  touch->touch_detected = raw->touch_detected;
-  touch->touchx[0]      = raw->touchx[0];
-  touch->touchy[0]      = raw->touchy[0];
+  touch->touch_detected = raw->touchDetected;
+  touch->touchx[0]      = raw->touchX[0];
+  touch->touchy[0]      = raw->touchY[0];
 }
