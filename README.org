@@ -83,3 +83,12 @@ See the following workshop repositories for concrete usage examples:
     }
   }
 #+END_SRC
+
+** Contributors
+
+| *Name*          | *Role*                          | *Website* |
+| [[mailto:k@thi.ng][Karsten Schmidt]] | initiator & principal developer | [[http://thi.ng][thi.ng]]    |
+
+** License
+
+This project is open source and licensed under the [[http://www.apache.org/licenses/LICENSE-2.0][Apache Software License 2.0]].
