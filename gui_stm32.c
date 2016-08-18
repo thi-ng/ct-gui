@@ -58,7 +58,7 @@ void ctgui_draw_raw(uint16_t x,
 }
 
 void ctgui_draw(CTGUI *gui) {
-  BSP_LCD_SetFont((sFont *)gui->font);
+  BSP_LCD_SetFont((sFONT *)gui->font);
   BSP_LCD_SetBackColor(gui->col_bg);
   BSP_LCD_SetTextColor(gui->col_text);
   for (uint32_t i = 0; i < gui->num_items; i++) {
