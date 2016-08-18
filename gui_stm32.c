@@ -14,13 +14,13 @@ static void LL_ConvertLineToARGB8888(void *src,
 
   hDma2dHandler.LayerCfg[1].AlphaMode      = DMA2D_NO_MODIF_ALPHA;
   hDma2dHandler.LayerCfg[1].InputAlpha     = 0xFF;
-  hDma2dHandler.LayerCfg[1].InputColorMode = ColorMode;
+  hDma2dHandler.LayerCfg[1].InputColorMode = color_mode;
   hDma2dHandler.LayerCfg[1].InputOffset    = 0;
   hDma2dHandler.Instance                   = DMA2D;
 
   if (HAL_DMA2D_Init(&hDma2dHandler) == HAL_OK) {
     if (HAL_DMA2D_ConfigLayer(&hDma2dHandler, 1) == HAL_OK) {
-      if (HAL_DMA2D_Start(&hDma2dHandler, (uint32_t)pSrc, (uint32_t)pDst, xSize,
+      if (HAL_DMA2D_Start(&hDma2dHandler, (uint32_t)src, (uint32_t)dst, xstride,
                           1) == HAL_OK) {
         HAL_DMA2D_PollForTransfer(&hDma2dHandler, 10);
       }

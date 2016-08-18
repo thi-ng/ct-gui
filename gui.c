@@ -107,7 +107,7 @@ CTGUI_Element *ctgui_element_init(CTGUI *gui,
                                   char *label,
                                   uint16_t x,
                                   uint16_t y,
-                                  CTGUI_SpriteSheet *sprite,
+                                  const CTGUI_SpriteSheet *sprite,
                                   CTGUI_Callback cb) {
   CTGUI_Element *e = &gui->items[id];
   e->id            = id;
@@ -115,7 +115,7 @@ CTGUI_Element *ctgui_element_init(CTGUI *gui,
   e->y             = y;
   e->width         = sprite->sprite_width;
   e->height        = sprite->sprite_height;
-  e->sprite        = sprite;
+  e->sprite        = (CTGUI_SpriteSheet *)sprite;
   e->label         = label;
   e->callback      = cb;
   e->state         = CTGUI_OFF | CTGUI_DIRTY;
@@ -129,7 +129,7 @@ CTGUI_Element *ctgui_dialbutton(CTGUI *gui,
                                 uint16_t y,
                                 float val,
                                 float sens,
-                                CTGUI_SpriteSheet *sprite,
+                                const CTGUI_SpriteSheet *sprite,
                                 CTGUI_Callback cb) {
   CTGUI_Element *e = ctgui_element_init(gui, id, label, x, y, sprite, cb);
   CTGUI_DialButtonState *db = calloc(1, sizeof(CTGUI_DialButtonState));
@@ -147,7 +147,7 @@ CTGUI_Element *ctgui_togglebutton(CTGUI *gui,
                                   uint16_t x,
                                   uint16_t y,
                                   float val,
-                                  CTGUI_SpriteSheet *sprite,
+                                  const CTGUI_SpriteSheet *sprite,
                                   CTGUI_Callback cb) {
   CTGUI_Element *e = ctgui_element_init(gui, id, label, x, y, sprite, cb);
   CTGUI_PushButtonState *pb = calloc(1, sizeof(CTGUI_PushButtonState));
@@ -164,7 +164,7 @@ CTGUI_Element *ctgui_radiobutton(CTGUI *gui,
                                  uint16_t x,
                                  uint16_t y,
                                  float val,
-                                 CTGUI_SpriteSheet *sprite,
+                                 const CTGUI_SpriteSheet *sprite,
                                  CTGUI_Callback cb) {
   CTGUI_Element *e = ctgui_element_init(gui, id, label, x, y, sprite, cb);
   CTGUI_PushButtonState *pb = calloc(1, sizeof(CTGUI_PushButtonState));
