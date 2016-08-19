@@ -583,7 +583,7 @@ const uint32_t bt_dustled48_2_rgb_length = 6912;
 // clang-format off
 // sprite sheet definition: 2 stages, 48x24, RGB (24bit)
 const CTGUI_SpriteSheet ctgui_spritesheet_dustled48 = {
-  .pixels = bt_dustled48_2_rgb888,
+  .pixels = ctgui_dustled48_2_rgb888,
   .sprite_width = 48,
   .sprite_height = 24,
   .num_sprites = 2,
