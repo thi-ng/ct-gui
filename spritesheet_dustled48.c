@@ -1,6 +1,4 @@
-#pragma once
-
-#include <stdint.h>
+#include "gui_stm32.h"
 
 __ALIGN_BEGIN const uint8_t ctgui_dustled48_2_rgb888[6912] __ALIGN_END = {
     0x6c, 0x62, 0x59, 0x6c, 0x62, 0x59, 0x6c, 0x62, 0x59, 0x6c, 0x62, 0x59,
@@ -581,3 +579,14 @@ __ALIGN_BEGIN const uint8_t ctgui_dustled48_2_rgb888[6912] __ALIGN_END = {
     0x6c, 0x62, 0x59, 0x6c, 0x62, 0x59, 0x6c, 0x62, 0x59, 0x6c, 0x62, 0x59};
 
 const uint32_t bt_dustled48_2_rgb_length = 6912;
+
+// clang-format off
+// sprite sheet definition: 2 stages, 48x24, RGB (24bit)
+const CTGUI_SpriteSheet ctgui_spritesheet_dustled48 = {
+  .pixels = bt_dustled48_2_rgb888,
+  .sprite_width = 48,
+  .sprite_height = 24,
+  .num_sprites = 2,
+  .format = CM_RGB888
+};
+// clang-format on

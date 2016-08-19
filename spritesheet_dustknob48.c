@@ -1,6 +1,4 @@
-#pragma once
-
-#include <stdint.h>
+#include "gui_stm32.h"
 
 __ALIGN_BEGIN const uint8_t ctgui_dustknob48_12_rgb888[82944] __ALIGN_END = {
     0x6c, 0x62, 0x59, 0x6c, 0x62, 0x59, 0x6c, 0x62, 0x59, 0x6c, 0x62, 0x59,
@@ -6916,4 +6914,13 @@ __ALIGN_BEGIN const uint8_t ctgui_dustknob48_12_rgb888[82944] __ALIGN_END = {
     0x6c, 0x62, 0x59, 0x6c, 0x62, 0x59, 0x6c, 0x62, 0x59, 0x6c, 0x62, 0x59,
     0x6c, 0x62, 0x59, 0x6c, 0x62, 0x59, 0x6c, 0x62, 0x59, 0x6c, 0x62, 0x59};
 
-const uint32_t bt_dustknob48_12_length = 82944;
+// clang-format off
+// sprite sheet definition: 12 stages, 48x48, RGB (24bit)
+const CTGUI_SpriteSheet ctgui_spritesheet_dustknob48 = {
+  .pixels = ctgui_dustknob48_12_rgb888,
+  .sprite_width = 48,
+  .sprite_height = 48,
+  .num_sprites = 12,
+  .format = CM_RGB888
+};
+// clang-format on
