@@ -39,17 +39,8 @@ See the following workshop repositories for concrete usage examples:
   // main header (auto-includes necessary STM BSP headers)
   #include "ct-gui/gui_stm32.h"
 
-  // dial button sprite sheet bitmap data
-  #include "ct-gui/bt_dustknob48_12.h"
-
-  // Sprite sheet definition (12 stages, 48x48, ARGB)
-  static const CTGUI_SpriteSheet dialSheet = {
-    .pixels = ctgui_dustknob48_12_rgb888,
-    .sprite_width = 48,
-    .sprite_height = 48,
-    .num_sprites = 12,
-    .format = CM_RGB888
-  };
+  // Sprite sheet definition (defined in spritesheet_dustknob48.c)
+  extern const CTGUI_SpriteSheet ctgui_dustknob48_12_rgb888;
 
   // event handler for volume dial knob changes
   static void setVolume(GUIElement *e) {
@@ -60,9 +51,9 @@ See the following workshop repositories for concrete usage examples:
   static void demoGUI() {
     CTGUI gui;
     ctgui_init(&gui, 3, &CTGUI_FONT, CTGUI_BG_COLOR, CTGUI_TEXT_COLOR);
-    ctgui_dialbutton(&gui, 0, "Volume", 135, 100, 0.f, 0.025f, &dialSheet, setVolume);
-    ctgui_dialbutton(&gui, 1, "Freq", 205, 100, 0.f, 0.025f, &dialSheet, NULL);
-    ctgui_dialbutton(&gui, 2, "Filter", 275, 100, 0.f, 0.025f, &dialSheet, NULL);
+    ctgui_dialbutton(&gui, 0, "Volume", 135, 100, 0.f, 0.025f, &ctgui_dustknob48_12_rgb888, setVolume);
+    ctgui_dialbutton(&gui, 1, "Freq", 205, 100, 0.f, 0.025f, &ctgui_dustknob48_12_rgb888, NULL);
+    ctgui_dialbutton(&gui, 2, "Filter", 275, 100, 0.f, 0.025f, &ctgui_dustknob48_12_rgb888, NULL);
 
     BSP_LCD_Clear(gui.col_bg);
     ctgui_force_redraw(&gui);
